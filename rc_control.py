@@ -29,13 +29,18 @@ def get_keys():
         pygame.K_s: 'DECELERATE'
     }
     for event in pygame.event.get():
-        if event.type in {pygame.K_q, pygame.K_ESCAPE}:
+        if event.type == pygame.QUIT:
             stop = True
+            print("stop")
         elif event.type in {pygame.KEYDOWN, pygame.KEYUP}:
-            down = (event.type == pygame.KEYDOWN)
-            change = (event.key in key_to_global_name)
-            if event.key in key_to_global_name:
-                globals()[key_to_global_name[event.key]] = down
+            if event.key in {pygame.K_q, pygame.K_ESCAPE}:
+                stop = True
+                print("stop")
+            else:
+                down = (event.type == pygame.KEYDOWN)
+                change = (event.key in key_to_global_name)
+                if event.key in key_to_global_name:
+                    globals()[key_to_global_name[event.key]] = down
     return (UP, DOWN, LEFT, RIGHT, change, ACCELERATE, DECELERATE, stop)
 
 
