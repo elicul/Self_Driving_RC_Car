@@ -2,9 +2,9 @@
 """Interactive control for the rc car"""
 import time
 import io
-#import pygame
-#import pygame.font
-#import picamera
+import pygame
+import pygame.font
+import picamera
 import configuration
 import utils.motor_driver as motor_driver_helper
 import utils.image as image_helper
