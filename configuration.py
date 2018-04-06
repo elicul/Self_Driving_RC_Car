@@ -14,10 +14,10 @@ FRONT_MOTOR_DATA_TWO = 26
 PWM_FREQUENCY = 1000
 INITIAL_PWM_DUTY_CYCLE = 100
 
-CLASSIFICATION_LABELS = ['forward', 'reverse', 'left', 'right', 'idle']
+CLASSIFICATION_LABELS = ['up', 'down', 'left', 'right', 'idle']
 CLASSIFICATION_LABELS_AND_VALUES = {
-    'forward': [1, 0, 0, 0, 0],
-    'reverse': [0, 1, 0, 0, 0],
+    'up': [1, 0, 0, 0, 0],
+    'down': [0, 1, 0, 0, 0],
     'left': [0, 0, 1, 0, 0],
     'right': [0, 0, 0, 1, 0],
     'idle': [0, 0, 0, 0, 1]

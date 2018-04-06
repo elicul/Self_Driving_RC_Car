@@ -65,23 +65,23 @@ def interactive_control():
                 motor_driver_helper.change_pwm_duty_cycle(pwm, duty_cycle)
                 print("RC Speed: " + str(duty_cycle))
             if change:
-                command = 'Idle'
+                command = 'idle'
                 motor_driver_helper.set_idle_mode()
                 if up_key:
-                    command = 'Up'
+                    command = 'up'
                     print(duty_cycle)
                     motor_driver_helper.set_forward_mode()
                 elif down:
-                    command = 'Down'
+                    command = 'down'
                     motor_driver_helper.set_reverse_mode()
 
-                append = lambda x: command + '_' + x if command != 'Idle' else x
+                append = lambda x: command + '_' + x if command != 'idle' else x
 
                 if left:
-                    command = append('Left')
+                    command = append('left')
                     motor_driver_helper.set_left_mode()
                 elif right:
-                    command = append('Right')
+                    command = append('right')
                     motor_driver_helper.set_right_mode()
             print(command)
             stream = io.BytesIO()
