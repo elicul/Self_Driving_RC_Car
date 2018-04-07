@@ -5,9 +5,9 @@ camera = picamera.PiCamera()
 
 camera.sharpness = 0
 camera.contrast = 0
-camera.brightness = 50
+camera.brightness = 60
 camera.saturation = 0
-camera.ISO = 0
+camera.ISO = 800
 camera.video_stabilization = False
 camera.exposure_compensation = 0
 camera.exposure_mode = 'auto'
@@ -20,6 +20,7 @@ camera.hflip = False
 camera.vflip = False
 camera.crop = (0.0, 0.0, 1.0, 1.0)
 
+sleep(5)
 camera.capture('image1.jpg')
 sleep(5)
 camera.capture('image2.jpg')
