@@ -53,6 +53,7 @@ def interactive_control():
         camera.resolution = configuration.PICAMERA_RESOLUTION
         camera.framerate = configuration.PICAMERA_FRAMERATE
         camera.iso = configuration.PICAMERA_ISO
+        camera.brightness = configuration.PICAMERA_BRIGHTNESS
         time.sleep(configuration.PICAMERA_WARM_UP_TIME)
         camera.shutter_speed = camera.exposure_speed
         camera.exposure_mode = 'off'
