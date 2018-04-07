@@ -49,10 +49,17 @@ def interactive_control():
     setup_interactive_control()
     clock = pygame.time.Clock()
     with picamera.PiCamera() as camera:
+        # Camera configuration
         camera.resolution = configuration.PICAMERA_RESOLUTION
         camera.framerate = configuration.PICAMERA_FRAMERATE
+        camera.iso = configuration.PICAMERA_ISO
         time.sleep(configuration.PICAMERA_WARM_UP_TIME)
-        # GPIO.output(BACK_MOTOR_ENABLE_PIN, True)
+        camera.shutter_speed = camera.exposure_speed
+        camera.exposure_mode = 'off'
+        g = camera.awb_gains
+        camera.awb_mode = 'off'
+        camera.awb_gains = g
+        # Motors
         pwm = motor_driver_helper.get_pwm_imstance()
         motor_driver_helper.start_pwm(pwm)
         command = 'idle'
