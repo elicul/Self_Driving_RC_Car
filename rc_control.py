@@ -54,12 +54,16 @@ def interactive_control():
         camera.framerate = configuration.PICAMERA_FRAMERATE
         camera.iso = configuration.PICAMERA_ISO
         camera.brightness = configuration.PICAMERA_BRIGHTNESS
+        camera.sharpness = 0
+        camera.contrast = 0
+        camera.saturation = 0
+        camera.exposure_compensation = 0
+        camera.exposure_mode = 'auto'
+        camera.meter_mode = 'average'
+        camera.awb_mode = 'auto'
+        camera.image_effect = 'none'
+        camera.color_effects = None
         time.sleep(configuration.PICAMERA_WARM_UP_TIME)
-        camera.shutter_speed = camera.exposure_speed
-        camera.exposure_mode = 'off'
-        g = camera.awb_gains
-        camera.awb_mode = 'off'
-        camera.awb_gains = g
         # Motors
         pwm = motor_driver_helper.get_pwm_imstance()
         motor_driver_helper.start_pwm(pwm)
@@ -103,6 +107,7 @@ def interactive_control():
             stream.flush()
 
             clock.tick(30)
+        GPIO.cleanup()
         pygame.quit()
 
 def setup_interactive_control():
