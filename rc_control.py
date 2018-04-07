@@ -62,11 +62,11 @@ def interactive_control():
             if stop:
                 break
             if accelerate:
-                duty_cycle = duty_cycle + 3 if (duty_cycle + 3) <= 100 else duty_cycle
+                duty_cycle = duty_cycle + 2 if (duty_cycle + 2) <= 100 else duty_cycle
                 motor_driver_helper.change_pwm_duty_cycle(pwm, duty_cycle)
                 print("RC Speed: " + str(duty_cycle))
             if decelerate:
-                duty_cycle = duty_cycle - 3 if (duty_cycle - 3) >= 0 else duty_cycle
+                duty_cycle = duty_cycle - 2 if (duty_cycle - 2) >= 0 else duty_cycle
                 motor_driver_helper.change_pwm_duty_cycle(pwm, duty_cycle)
                 print("RC Speed: " + str(duty_cycle))
             if change:
