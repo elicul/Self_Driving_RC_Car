@@ -21,7 +21,7 @@ import argparse
 
 import numpy as np
 import tensorflow as tf
-
+import time
 
 def load_graph(model_file):
   graph = tf.Graph()
@@ -71,8 +71,11 @@ def load_labels(label_file):
     label.append(l.rstrip())
   return label
 
+def current_mili_time():
+  return int(round(time.time() * 1000))
 
 if __name__ == "__main__":
+  start_time = current_mili_time()
   file_name = "tensorflow/examples/label_image/data/grace_hopper.jpg"
   model_file = \
     "tensorflow/examples/label_image/data/inception_v3_2016_08_28_frozen.pb"
@@ -138,3 +141,5 @@ if __name__ == "__main__":
   labels = load_labels(label_file)
   for i in top_k:
     print(labels[i], results[i])
+
+  print("Calculation time: ", current_mili_time()-start_time, " ms")
