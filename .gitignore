@@ -23,4 +23,3 @@ render/
 .vscode
 tensorflow_test/flower_photos
 tensorflow_test/mobile-flowers.pb
-tensorflow_test/mobile-labels.txt
