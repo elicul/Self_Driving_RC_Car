@@ -75,7 +75,6 @@ def current_mili_time():
   return int(round(time.time() * 1000))
 
 if __name__ == "__main__":
-  start_time = current_mili_time()
   file_name = "tensorflow/examples/label_image/data/grace_hopper.jpg"
   model_file = \
     "tensorflow/examples/label_image/data/inception_v3_2016_08_28_frozen.pb"
@@ -131,15 +130,15 @@ if __name__ == "__main__":
   input_operation = graph.get_operation_by_name(input_name)
   output_operation = graph.get_operation_by_name(output_name)
 
+  start_time = current_mili_time()  
   with tf.Session(graph=graph) as sess:
     results = sess.run(output_operation.outputs[0], {
         input_operation.outputs[0]: t
     })
+  print("Calculation time: ", current_mili_time()-start_time, " ms")
   results = np.squeeze(results)
 
-  top_k = results.argsort()[-5:][::-1]
+  top_k = results.argsort()[-1:][::-1]
   labels = load_labels(label_file)
   for i in top_k:
     print(labels[i], results[i])
-
-  print("Calculation time: ", current_mili_time()-start_time, " ms")
