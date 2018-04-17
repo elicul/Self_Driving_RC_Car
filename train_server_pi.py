@@ -35,7 +35,7 @@ def Main():
         # Motors
         pwm = motor_driver_helper.get_pwm_imstance()
         motor_driver_helper.start_pwm(pwm)
-        command = str(data)
+        command = 'idle'
         duty_cycle = configuration.INITIAL_PWM_DUTY_CYCLE
         
         while True:
