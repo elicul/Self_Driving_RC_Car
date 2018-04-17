@@ -85,8 +85,8 @@ def interactive_control(mySocket):
     pygame.quit()
 
 def Main():
-    host = '127.0.0.1'
-    port = 5000
+    host = '192.168.0.187'
+    port = 8080
         
     mySocket = socket.socket()
     mySocket.connect((host,port))

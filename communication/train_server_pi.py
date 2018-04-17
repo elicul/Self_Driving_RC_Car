@@ -7,8 +7,8 @@ import utils.motor_driver as motor_driver_helper
 import utils.image as image_helper
 
 def Main():
-    host = "127.0.0.1"
-    port = 5000
+    host = "192.168.0.187"
+    port = 8080
      
     mySocket = socket.socket()
     mySocket.bind((host,port))
