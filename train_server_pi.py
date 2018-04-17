@@ -5,6 +5,7 @@ import picamera
 import configuration
 import utils.motor_driver as motor_driver_helper
 import utils.image as image_helper
+import RPi.GPIO as GPIO
 
 def Main():
     motor_driver_helper.set_gpio_pins()
@@ -54,27 +55,27 @@ def Main():
                 print("RC Speed: " + str(duty_cycle))
             if str(data) == 'idle':
                 command = 'idle'
-                #motor_driver_helper.set_idle_mode()
+                motor_driver_helper.set_idle_mode()
             elif str(data) == 'up':
                 command = 'up'
-                #motor_driver_helper.set_forward_mode()
+                motor_driver_helper.set_forward_mode()
             elif str(data) == 'down':
                 command = 'down'
-                #motor_driver_helper.set_reverse_mode()
+                motor_driver_helper.set_reverse_mode()
             elif str(data) == 'left':
                 command = 'left'
-                #motor_driver_helper.set_left_mode()
+                motor_driver_helper.set_left_mode()
             elif str(data) == 'right':
                 command = 'right'
-                #motor_driver_helper.set_right_mode()
+                motor_driver_helper.set_right_mode()
             elif str(data) == 'up_left':
                 command = 'left'
-                #motor_driver_helper.set_forward_mode()                    
-                #motor_driver_helper.set_left_mode()
+                motor_driver_helper.set_forward_mode()                    
+                motor_driver_helper.set_left_mode()
             elif str(data) == 'up_right':
                 command = 'right'
-                #motor_driver_helper.set_forward_mode()                    
-                #motor_driver_helper.set_right_mode()
+                motor_driver_helper.set_forward_mode()                    
+                motor_driver_helper.set_right_mode()
             print ("Sending: " + str(command))
             conn.send(data.encode())
             
