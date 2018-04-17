@@ -57,7 +57,6 @@ def Main():
                 #motor_driver_helper.set_idle_mode()
             elif str(data) == 'up':
                 command = 'up'
-                print(duty_cycle)
                 #motor_driver_helper.set_forward_mode()
             elif str(data) == 'down':
                 command = 'down'
