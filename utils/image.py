@@ -6,4 +6,4 @@ def save_image_with_direction(stream, direction):
     """Save image"""
     stream.seek(0)
     image = Image.open(stream)
-    image.save('../images/' + direction + '/image%s.jpg' % ("-" + direction + "-"+ str(time.time())), format="JPEG")
+    image.save('images/' + direction + '/image%s.jpg' % ("-" + direction + "-"+ str(time.time())), format="JPEG")
