@@ -1,3 +1,3 @@
-python retrain.py --image_dir ../images --how_many_training_steps=500 --output_graph=car-model.pb --output_labels=car-classes.txt --tfhub_module https://tfhub.dev/google/imagenet/mobilenet_v1_025_128/quantops/feature_vector/1
+python retrain.py --image_dir ../images --how_many_training_steps=500 --output_graph=car-model.pb --output_labels=car-labels.txt --tfhub_module https://tfhub.dev/google/imagenet/mobilenet_v1_025_128/quantops/feature_vector/1
 
-python label_image.py --graph=car-model.pb --labels=car-classes.txt --image ../images/right/1.image-1468942150.05right.jpg --input_layer=Placeholder --output_layer=final_result --input_width=128 --input_height=128
+python label_image.py --graph=car-model.pb --labels=car-labels.txt --image ../images/right/1.image-1468942150.05right.jpg --input_layer=Placeholder --output_layer=final_result --input_width=128 --input_height=128
