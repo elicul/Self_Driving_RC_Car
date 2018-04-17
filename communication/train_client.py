@@ -75,9 +75,6 @@ def interactive_control(mySocket):
             mySocket.send(command.encode())
             data = mySocket.recv(1024).decode()
             print ('Received from server: ' + data)
-        stream = io.BytesIO()
-        stream.flush()
-
         clock.tick(30)
     pygame.quit()
 

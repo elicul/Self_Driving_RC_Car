@@ -68,9 +68,11 @@ def Main():
                     motor_driver_helper.set_right_mode()
                 elif str(data) == 'up_left':
                     command = 'left'
+                    motor_driver_helper.set_forward_mode()                    
                     motor_driver_helper.set_left_mode()
-                elif str(data) == 'right':
+                elif str(data) == 'up_right':
                     command = 'right'
+                    motor_driver_helper.set_forward_mode()                    
                     motor_driver_helper.set_right_mode()
                 print(command)
             stream = io.BytesIO()
@@ -80,12 +82,9 @@ def Main():
 
             clock.tick(30)
         GPIO.cleanup()
-        pygame.quit()
         """
         print ("Received: " + str(data))
-            
-        data = "Command received"
-        print ("Sending: " + data)
+        print ("Sending: " + str(data))
         conn.send(data.encode())
              
     conn.close()
