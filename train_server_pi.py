@@ -7,6 +7,7 @@ import utils.motor_driver as motor_driver_helper
 import utils.image as image_helper
 
 def Main():
+    motor_driver_helper.set_gpio_pins()
     host = "192.168.0.187"
     port = 8080
      
