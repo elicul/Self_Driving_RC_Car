@@ -76,6 +76,14 @@ def Main():
                 command = 'right'
                 motor_driver_helper.set_forward_mode()                    
                 motor_driver_helper.set_right_mode()
+            elif str(data) == 'down_left':
+                command = 'left'
+                motor_driver_helper.set_reverse_mode()                    
+                motor_driver_helper.set_left_mode()
+            elif str(data) == 'down_right':
+                command = 'right'
+                motor_driver_helper.set_reverse_mode()                    
+                motor_driver_helper.set_right_mode()
             print ("Sending: " + str(command))
             conn.send(data.encode())
             
