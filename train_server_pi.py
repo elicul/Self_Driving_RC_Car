@@ -76,15 +76,15 @@ def Main():
                 command = 'right'
                 #motor_driver_helper.set_forward_mode()                    
                 #motor_driver_helper.set_right_mode()
-        print ("Sending: " + str(command))
-        conn.send(data.encode())
-        
-        stream = io.BytesIO()
-        camera.capture(stream, format='jpeg', use_video_port=True)
-        image_helper.save_image_with_direction(stream, command)
-        stream.flush()
+            print ("Sending: " + str(command))
+            conn.send(data.encode())
+            
+            stream = io.BytesIO()
+            camera.capture(stream, format='jpeg', use_video_port=True)
+            image_helper.save_image_with_direction(stream, command)
+            stream.flush()
 
-    GPIO.cleanup()
+        GPIO.cleanup()
              
     conn.close()
      
