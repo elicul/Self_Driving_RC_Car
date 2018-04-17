@@ -1,5 +1,11 @@
 import socket
- 
+import time
+import io
+import picamera
+import configuration
+import utils.motor_driver as motor_driver_helper
+import utils.image as image_helper
+
 def Main():
     host = "127.0.0.1"
     port = 5000
@@ -16,7 +22,6 @@ def Main():
             break
         if not data:
             break
-        """
         with picamera.PiCamera() as camera:
             # Camera configuration
             camera.resolution = configuration.PICAMERA_RESOLUTION
@@ -82,7 +87,7 @@ def Main():
 
             clock.tick(30)
         GPIO.cleanup()
-        """
+
         print ("Received: " + str(data))
         print ("Sending: " + str(data))
         conn.send(data.encode())
