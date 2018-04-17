@@ -60,6 +60,7 @@ def current_mili_time():
   return int(round(time.time() * 1000))
 
 def Main():
+    """
     file_name = ""
     model_file = "../tensorflow/car-model.pb"
     label_file = "../tensorflow/car-labels.pb"
@@ -84,8 +85,9 @@ def Main():
     output_operation = graph.get_operation_by_name(output_name)
     # Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
     # all interfaces)
+    """
     server_socket = socket.socket()
-    server_socket.bind(('0.0.0.0', 8000))
+    server_socket.bind(('192.168.0.193', 8090))
     server_socket.listen(0)
 
     # Accept a single connection and make a file-like object out of it
@@ -108,6 +110,8 @@ def Main():
             print('Image is %dx%d' % image.size)
             image.verify()
             print('Image is verified')
+            image.show()
+            """
             start_time = current_mili_time()  
             with tf.Session(graph=graph) as sess:
               results = sess.run(output_operation.outputs[0], {
@@ -120,6 +124,7 @@ def Main():
             for i in top_k:
               data = labels[i]
             connection.send(data.encode())
+            """
     finally:
         connection.close()
         server_socket.close()

@@ -3,22 +3,32 @@ import socket
 import struct
 import time
 import picamera
+import configuration
 
 def Main():
     # Connect a client socket to my_server:8000 (change my_server to the
     # hostname of your server)
     client_socket = socket.socket()
-    client_socket.connect(('my_server', 8000))
+    client_socket.connect(('192.168.0.193', 8090))
 
     # Make a file-like object out of the connection
     connection = client_socket.makefile('wb')
     try:
         with picamera.PiCamera() as camera:
-            camera.resolution = (640, 480)
-            camera.framerate = 10
-            # Start a preview and let the camera warm up for 2 seconds
-            camera.start_preview()
-            time.sleep(2)
+            camera.resolution = configuration.PICAMERA_RESOLUTION
+            camera.framerate = configuration.PICAMERA_FRAMERATE
+            camera.iso = configuration.PICAMERA_ISO
+            camera.brightness = configuration.PICAMERA_BRIGHTNESS
+            camera.sharpness = 0
+            camera.contrast = 0
+            camera.saturation = 0
+            camera.exposure_compensation = 0
+            camera.exposure_mode = 'auto'
+            camera.meter_mode = 'average'
+            camera.awb_mode = 'auto'
+            camera.image_effect = 'none'
+            camera.color_effects = None
+            time.sleep(configuration.PICAMERA_WARM_UP_TIME)
 
             # Note the start time and construct a stream to hold image data
             # temporarily (we could write it directly to connection but in this
