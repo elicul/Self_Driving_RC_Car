@@ -85,7 +85,6 @@ def Main():
             image_helper.save_image_with_direction(stream, command)
             stream.flush()
 
-            clock.tick(30)
         GPIO.cleanup()
 
         print ("Received: " + str(data))

@@ -60,6 +60,12 @@ def interactive_control(mySocket):
             command = 'stop'
             mySocket.send(command.encode())
             break
+        if accelerate:
+            command = 'accelerate'
+            mySocket.send(command.encode())
+        if decelerate:
+            command = 'decelerate'
+            mySocket.send(command.encode())
         if change:
             command = 'idle'
             if up_key:
