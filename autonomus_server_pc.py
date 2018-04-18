@@ -126,7 +126,7 @@ def Main():
   server_socket.listen(0)
 
   # Accept a single connection and make a file-like object out of it
-  connection, addr = server_socket.accept()[0].makefile('rb')
+  connection = server_socket.accept()[0].makefile('rb')
   try:
     while True:
       change, resume, pause, stop = get_keys()
