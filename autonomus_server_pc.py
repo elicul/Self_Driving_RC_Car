@@ -127,13 +127,13 @@ def Main():
   # Accept a single connection and make a file-like object out of it
   connection = server_socket.accept()[0].makefile('rb')
   try:
-    pygame_init()
+    #pygame_init()
     while True:
-      change, resume, pause, stop = get_keys()
-      print(get_keys())
-      if stop:
-        print('stop server')
-        break
+      #change, resume, pause, stop = get_keys()
+      #print(get_keys())
+      #if stop:
+      #  print('stop server')
+      #  break
       start_time = current_mili_time()
       # Read the length of the image as a 32-bit unsigned int. If the
       # length is zero, quit the loop
@@ -176,7 +176,7 @@ def Main():
       connection.send(data.encode())
       """
       print('Calculation time: ', current_mili_time()-start_time, ' ms')            
-    pygame.quit()
+    #pygame.quit()
   finally:
     connection.close()
     server_socket.close()
