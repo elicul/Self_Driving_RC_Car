@@ -1,74 +1,46 @@
 #!/usr/bin/env python
 
-import pygame
-from threading import Thread
 import socket
 import struct # to send `int` as  `4 bytes`
 import time   # for test
+import base64
+
+from PIL import Image
 
 ADDRESS = ("localhost", 12801)
-SURFACE_SIZE = (640, 480)
-WHITE = (255, 255, 255)
-BLACK = (  0,   0,   0)
-GREEN = (  0, 255,   0)
 
-class Streaming(Thread):
+s = socket.socket()
+#s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.bind(ADDRESS)
+s.listen(1)
 
-    def __init__(self):
-        Thread.__init__(self)
-        pygame.init()
-        # create surface to imitate camera image
-        self.image = pygame.Surface(SURFACE_SIZE)
-        self.image_rect = self.image.get_rect()
-        # create font to display text on surface
-        self.font = pygame.font.Font(None, 50)
+print("Wait for connection")
 
-    def get_image(self):
-        # emulate cam.get_image()
-        # get current time as string
-        current_time = time.strftime('%H:%M:%S.%s')
-        # render surface with text (and center it)
-        text = self.font.render(current_time, True, BLACK, GREEN)
-        text_rect = text.get_rect(center=self.image_rect.center)
-        # clear image and put new text
-        self.image.fill(WHITE)
-        self.image.blit(text, text_rect)
-        return self.image
+try:
+    sc, info = s.accept()
+    print("Video client connected:", info)
+    while True:
+        # get image surface
+        #image = self.cam.get_image()
+        # convert surface to string
+        with open("test.jpg", "rb") as imageFile:
+            img_str = base64.b64encode(imageFile.read())
 
-    def run(self):
-        s = socket.socket()
-        # solution for: "socket.error: [Errno 98] Address already in use"
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        s.bind(ADDRESS)
-        s.listen(1)
+        print('len:', len(img_str))
+        # send string size
+        len_str = struct.pack('!i', len(img_str))
+        sc.send(len_str)
+        # send string image
+        sc.send(img_str)
+        # wait
+        time.sleep(0.5)
+        data = sc.recv(4096)
+        print(data.decode('utf-8'))
 
-        print("Wait for connection")
-
-        try:
-            sc, info = s.accept()
-            print("Video client connected:", info)
-            while True:
-                # get image surface
-                #image = self.cam.get_image()
-                image = self.get_image()
-                # convert surface to string
-                img_str = pygame.image.tostring(image, 'RGB')
-                print('len:', len(img_str))
-                # send string size
-                len_str = struct.pack('!i', len(img_str))
-                sc.send(len_str)
-                # send string image
-                sc.send(img_str)
-                # wait
-                time.sleep(0.5)
-
-        except Exception as e:
-            print(e)
-        finally:
-            # exit
-            print("Closing socket and exit")
-            sc.close()
-            s.close()
-            pygame.quit()
-
-Streaming().run()
+except Exception as e:
+    print(e)
+finally:
+    # exit
+    print("Closing socket and exit")
+    sc.close()
+    s.close()
