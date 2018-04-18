@@ -1,14 +1,14 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from PIL import Image
+
 import io
 import socket
 import struct
 import numpy as np
 import tensorflow as tf
 import time
-
-from PIL import Image
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 def load_graph(model_file):
   graph = tf.Graph()
@@ -106,7 +106,8 @@ def Main():
             # Rewind the stream, open it as an image with PIL and do some
             # processing on it
             image_stream.seek(0)
-            image = Image.open(image_stream)
+            image = Image.open(image_stream).convert('RGB')
+            image.save('test.jpg','JPEG')
             print('Image is %dx%d' % image.size)
             image.verify()
             print('Image is verified')
