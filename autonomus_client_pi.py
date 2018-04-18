@@ -45,7 +45,7 @@ def Main():
                 if time.time() - start > 30:
                     break
                 
-                image_len = struct.pack('!i', len(stream))
+                image_len = struct.pack('!i', len(image_base64))
                 client_socket.send(image_len)
                 # send string image
                 client_socket.send(image_base64)
