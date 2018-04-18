@@ -41,6 +41,7 @@ def Main():
                 # ensure it actually gets sent
                 #data = client_socket.recv(1024).decode()
                 #print(data)
+                print(connection.read(command.decode()))
                 connection.write(struct.pack('<L', stream.tell()))
                 connection.flush()
                 # Rewind the stream and send the image data over the wire
