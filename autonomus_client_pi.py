@@ -41,7 +41,6 @@ def Main():
                 # ensure it actually gets sent
                 #data = client_socket.recv(1024).decode()
                 #print(data)
-                print(connection.read().decode())
                 connection.write(struct.pack('<L', stream.tell()))
                 connection.flush()
                 # Rewind the stream and send the image data over the wire
@@ -50,9 +49,16 @@ def Main():
                 # If we've been capturing for more than 30 seconds, quit
                 if time.time() - start > 30:
                     break
+                
                 # Reset the stream for the next capture
                 stream.seek(0)
                 stream.truncate()
+                txt_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
+                if not txt_len:
+                    break
+                txt_stream = io.BytesIO()
+                txt_stream.write(connection.read(txt_len))
+                txt_stream.seek(0)
         # Write a length of zero to the stream to signal we're done
         connection.write(struct.pack('<L', 0))
     finally:

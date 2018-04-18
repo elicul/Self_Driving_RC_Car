@@ -153,7 +153,13 @@ def Main():
       image.verify()
       print('Image is verified')
       command = 'Complete'
-      connection.write(command.encode())
+      stream = io.BytesIO(command.encode())
+      connection.write(struct.pack('<L', stream.tell()))
+      connection.flush()
+      stream.seek(0)
+      connection.write(stream.read())
+      stream.seek(0)
+      stream.truncate()
       """
       image.show()
       t = read_tensor_from_image_file(
