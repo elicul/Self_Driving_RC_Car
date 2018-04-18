@@ -39,6 +39,8 @@ def Main():
             for foo in camera.capture_continuous(stream, 'jpeg', use_video_port = True):
                 # Write the length of the capture to the stream and flush to
                 # ensure it actually gets sent
+                data = client_socket.recv(1024).decode()
+                print(data)
                 connection.write(struct.pack('<L', stream.tell()))
                 connection.flush()
                 # Rewind the stream and send the image data over the wire
