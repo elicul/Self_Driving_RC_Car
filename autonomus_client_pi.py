@@ -5,6 +5,7 @@ import time
 import picamera
 import base64
 import configuration
+import utils.motor_driver as motor_driver_helper
 
 def Main():
     client_socket = socket.socket()
@@ -32,9 +33,6 @@ def Main():
             for foo in camera.capture_continuous(stream, 'jpeg', use_video_port = True):
                 stream.seek(0)
                 image_base64 = base64.b64encode(stream.read())
-                #!Remove
-                if time.time() - start > 30:
-                    break
                 
                 image_len = struct.pack('!i', len(image_base64))
                 client_socket.send(image_len)
@@ -44,7 +42,43 @@ def Main():
                 stream.truncate()
 
                 data = client_socket.recv(4096)
-                print(data.decode('utf-8'))
+                data = data.decode('utf-8')
+                print ('Received: ' data)  
+                
+                if data == 'stop':
+                    break
+                elif data == 'accelerate':
+                    duty_cycle = duty_cycle + 2 if (duty_cycle + 2) <= 100 else duty_cycle
+                    motor_driver_helper.change_pwm_duty_cycle(pwm, duty_cycle)
+                    print('RC Speed: ' + str(duty_cycle))
+                elif data == 'decelerate':
+                    duty_cycle = duty_cycle - 2 if (duty_cycle - 2) >= 0 else duty_cycle
+                    motor_driver_helper.change_pwm_duty_cycle(pwm, duty_cycle)
+                    print('RC Speed: ' + str(duty_cycle))
+                elif data == 'idle':
+                    motor_driver_helper.set_idle_mode()
+                elif data == 'up':
+                    motor_driver_helper.set_forward_mode()
+                elif data == 'down':
+                    motor_driver_helper.set_reverse_mode()
+                elif data == 'left':
+                    motor_driver_helper.set_left_mode()
+                elif data == 'right':
+                    motor_driver_helper.set_right_mode()
+                elif data == 'up_left':
+                    motor_driver_helper.set_forward_mode()                    
+                    motor_driver_helper.set_left_mode()
+                elif data == 'up_right':
+                    motor_driver_helper.set_forward_mode()                    
+                    motor_driver_helper.set_right_mode()
+                elif data == 'down_left':
+                    motor_driver_helper.set_reverse_mode()                    
+                    motor_driver_helper.set_left_mode()
+                elif data == 'down_right':
+                    command = 'right'
+                    motor_driver_helper.set_reverse_mode()                    
+                    motor_driver_helper.set_right_mode()
+
     finally:
         client_socket.close()
 

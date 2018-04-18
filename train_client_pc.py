@@ -2,6 +2,7 @@ import socket
 import pygame
 import pygame.font
 import io
+import configuration
 
 UP = LEFT = DOWN = RIGHT = ACCELERATE = DECELERATE = False
 
@@ -50,7 +51,7 @@ def setup_interactive_control():
     screen.blit(background, (0, 0))
     pygame.display.flip()
 
-def interactive_control(mySocket):
+def interactive_control(client_socket):
     """Runs the interactive control"""
     setup_interactive_control()
     clock = pygame.time.Clock()
@@ -58,14 +59,14 @@ def interactive_control(mySocket):
         up_key, down, left, right, change, accelerate, decelerate, stop = get_keys()
         if stop:
             command = 'stop'
-            mySocket.send(command.encode())
+            client_socket.send(command.encode())
             break
         if accelerate:
             command = 'accelerate'
-            mySocket.send(command.encode())
+            client_socket.send(command.encode())
         if decelerate:
             command = 'decelerate'
-            mySocket.send(command.encode())
+            client_socket.send(command.encode())
         if change:
             command = 'idle'
             if up_key:
@@ -77,23 +78,20 @@ def interactive_control(mySocket):
                 command = append('left')
             elif right:
                 command = append('right')
-            print(command)
-            mySocket.send(command.encode())
-            data = mySocket.recv(1024).decode()
+            client_socket.send(command.encode())
+            data = client_socket.recv(1024).decode()
             print ('Received from server: ' + data)
         clock.tick(30)
     pygame.quit()
 
 def Main():
-    host = '192.168.0.187'
-    port = 8080
-        
-    mySocket = socket.socket()
-    mySocket.connect((host,port))
-        
-    interactive_control(mySocket)
-                
-    mySocket.close()
+    try:
+        client_socket = socket.socket()
+        client_socket.connect(configuration.PI_HOST_PORT)
+        interactive_control(client_socket)
+    
+    finally:        
+        client_socket.close()
  
 if __name__ == '__main__':
     Main()

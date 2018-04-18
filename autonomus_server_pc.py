@@ -14,7 +14,7 @@ import pygame
 import pygame.font
 import base64
 
-RESUME = PAUSE = False
+PAUSE = False
 
 def load_graph(model_file):
   graph = tf.Graph()
@@ -71,7 +71,6 @@ def get_keys():
   key_to_global_name = {
       pygame.K_ESCAPE: 'QUIT',
       pygame.K_q: 'QUIT',
-      pygame.K_r: 'RESUME',
       pygame.K_p: 'PAUSE'
   }
   for event in pygame.event.get():
@@ -82,10 +81,9 @@ def get_keys():
         stop = True
       else:
         down = (event.type == pygame.KEYDOWN)
-        change = (event.key in key_to_global_name)
         if event.key in key_to_global_name:
           globals()[key_to_global_name[event.key]] = down
-  return (change, RESUME, PAUSE, stop)
+  return (PAUSE, stop)
 
 def pygame_init():
   """Setup the Pygame Interactive Control Screen"""
@@ -103,79 +101,74 @@ def pygame_init():
   pygame.display.flip()
 
 def Main():
-  """
-  model_file = '../tensorflow/car-model.pb'
-  label_file = '../tensorflow/car-labels.pb'
-  input_height = 96
-  input_width = 96
-  input_mean = 0
-  input_std = 255
-  input_layer = 'Placeholder'
-  output_layer = 'final_result'
-
-  graph = load_graph(model_file)
-  input_name = 'import/' + input_layer
-  output_name = 'import/' + output_layer
-  input_operation = graph.get_operation_by_name(input_name)
-  output_operation = graph.get_operation_by_name(output_name)
-  # Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
-  # all interfaces)
-  """
-  server_socket = socket.socket()
-  server_socket.bind(('192.168.0.193', 8090))
-  server_socket.listen(0)
-     
-  connection = server_socket.accept()[0]
   try:
+    """
+    model_file = '../tensorflow/car-model.pb'
+    label_file = '../tensorflow/car-labels.pb'
+    input_height = 96
+    input_width = 96
+    input_mean = 0
+    input_std = 255
+    input_layer = 'Placeholder'
+    output_layer = 'final_result'
+
+    graph = load_graph(model_file)
+    input_name = 'import/' + input_layer
+    output_name = 'import/' + output_layer
+    input_operation = graph.get_operation_by_name(input_name)
+    output_operation = graph.get_operation_by_name(output_name)
+    # Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
+    # all interfaces)
+    """
+    server_socket = socket.socket()
+    server_socket.bind(configuration.PC_HOST_PORT)
+    server_socket.listen(0)
+      
+    connection = server_socket.accept()[0]
     #pygame_init()
     while True:
       start_time = current_mili_time()      
-      #change, resume, pause, stop = get_keys()
+      #pause, stop = get_keys()
       #print(get_keys())
       #if stop:
       #  print('stop server')
       #  break
+      if not pause:
+        image_len = connection.recv(4)
+        image_size = struct.unpack('!i', image_len)[0]
+        image_base64 = ''
+        while image_size > 0:
+          if image_size >= 4096:
+            data = connection.recv(4096)
+            image_size -= len(data)  
+            image_base64 += data.decode('utf-8')              
+          else:
+            data = connection.recv(image_size)
+            image_size -= len(data)
+            image_base64 += data.decode('utf-8')                
 
-      image_len = connection.recv(4)
-      image_size = struct.unpack('!i', image_len)[0]
-      image_base64 = ''
-      while image_size > 0:
-        if image_size >= 4096:
-          data = connection.recv(4096)
-          image_size -= len(data)  
-          image_base64 += data.decode('utf-8')              
-        else:
-          data = connection.recv(image_size)
-          image_size -= len(data)
-          image_base64 += data.decode('utf-8')                
-
-      image = open(configuration.TMP_BUFFER_DIR + 'pi_image.jpg', 'wb')
-      image.write(base64.b64decode(image_base64))
-      image.close()
-      data = 'up | down | left | right'
-      connection.send(data.encode())
-      """
-      image.show()
-      t = read_tensor_from_image_file(
-        configuration.TMP_BUFFER_DIR + 'pi_image.jpg',
-        input_height=input_height,
-        input_width=input_width,
-        input_mean=input_mean,
-        input_std=input_std)
-      start_time = current_mili_time()  
-      with tf.Session(graph=graph) as sess:
-        results = sess.run(output_operation.outputs[0], {
-            input_operation.outputs[0]: t
-        })
-      print('Calculation time: ', current_mili_time()-start_time, ' ms')
-      results = np.squeeze(results)
-      top_k = results.argsort()[-1:][::-1]
-      labels = load_labels(label_file)
-      for i in top_k:
-        data = labels[i]
-      connection.send(data.encode())
-      """
-      print('Calculation time: ', current_mili_time()-start_time, ' ms')            
+        image = open(configuration.TMP_BUFFER_DIR + 'pi_image.jpg', 'wb')
+        image.write(base64.b64decode(image_base64))
+        image.close()
+        """
+        t = read_tensor_from_image_file(
+          configuration.TMP_BUFFER_DIR + 'pi_image.jpg',
+          input_height=input_height,
+          input_width=input_width,
+          input_mean=input_mean,
+          input_std=input_std)
+        with tf.Session(graph=graph) as sess:
+          results = sess.run(output_operation.outputs[0], {
+              input_operation.outputs[0]: t
+          })
+        results = np.squeeze(results)
+        top_k = results.argsort()[-1:][::-1]
+        labels = load_labels(label_file)
+        for i in top_k:
+          data = labels[i]
+        connection.send(data.encode())
+        """
+        print('Calculation time: ', current_mili_time()-start_time, ' ms')            
     #pygame.quit()
   finally:
     connection.close()
