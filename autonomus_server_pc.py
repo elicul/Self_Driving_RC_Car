@@ -153,7 +153,7 @@ def Main():
       print('Image is %dx%d' % image.size)
       image.verify()
       print('Image is verified')
-      txt_stream = io.StringIO('This goes into the read buffer.')
+      txt_stream = io.StringIO(u'This goes into the read buffer.')
       connection.write(struct.pack('<L', txt_stream.tell()))
       connection.flush()
       txt_stream.seek(0)
