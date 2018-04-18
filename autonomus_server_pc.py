@@ -120,7 +120,6 @@ def Main():
   # Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
   # all interfaces)
   """
-  pygame_init()
   server_socket = socket.socket()
   server_socket.bind(('192.168.0.193', 8090))
   server_socket.listen(0)
@@ -128,6 +127,7 @@ def Main():
   # Accept a single connection and make a file-like object out of it
   connection = server_socket.accept()[0].makefile('rb')
   try:
+    pygame_init()
     while True:
       change, resume, pause, stop = get_keys()
       print(get_keys())
@@ -176,6 +176,7 @@ def Main():
       connection.send(data.encode())
       """
       print('Calculation time: ', current_mili_time()-start_time, ' ms')            
+    pygame.quit()
   finally:
     connection.close()
     server_socket.close()
