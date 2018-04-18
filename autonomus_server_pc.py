@@ -125,7 +125,6 @@ def Main():
   server_socket.bind(('192.168.0.193', 8090))
   server_socket.listen(0)
      
-  # Accept a single connection and make a file-like object out of it
   connection = server_socket.accept()[0]
   try:
     #pygame_init()
@@ -139,8 +138,6 @@ def Main():
 
       image_len = connection.recv(4)
       image_size = struct.unpack('!i', image_len)[0]
-      print('Image size:', image_size)
-      # receive string
       image_base64 = ''
       while image_size > 0:
         if image_size >= 4096:
@@ -152,14 +149,11 @@ def Main():
           image_size -= len(data)
           image_base64 += data.decode('utf-8')                
 
-      print('len:', len(image_base64))
-      # convert string to surface
       image = open(configuration.TMP_BUFFER_DIR + 'pi_image.jpg', 'wb')
       image.write(base64.b64decode(image_base64))
       image.close()
-      data = 'I got the image'
+      data = 'up | down | left | right'
       connection.send(data.encode())
-      time.sleep(0.5)
       """
       image.show()
       t = read_tensor_from_image_file(
