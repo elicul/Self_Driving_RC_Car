@@ -153,7 +153,7 @@ def Main():
       image.verify()
       print('Image is verified')
       command = 'Complete'
-      server_socket.send(command.encode())
+      #server_socket.send(command.encode())
       """
       image.show()
       t = read_tensor_from_image_file(
