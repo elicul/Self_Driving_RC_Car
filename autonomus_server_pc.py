@@ -12,6 +12,7 @@ import time
 import configuration
 import pygame
 import pygame.font
+import base64
 
 RESUME = PAUSE = False
 
@@ -125,41 +126,40 @@ def Main():
   server_socket.listen(0)
      
   # Accept a single connection and make a file-like object out of it
-  connection = server_socket.accept()[0].makefile('rb')
+  connection = server_socket.accept()[0]
   try:
-    pygame_init()
+    #pygame_init()
     while True:
-      change, resume, pause, stop = get_keys()
-      print(get_keys())
-      if stop:
-        print('stop server')
-        break
-      
-      start_time = current_mili_time()
-      # Read the length of the image as a 32-bit unsigned int. If the
-      # length is zero, quit the loop
-      image_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
-      if not image_len:
-        break
-      # Construct a stream to hold the image data and read the image
-      # data from the connection
-      image_stream = io.BytesIO()
-      image_stream.write(connection.read(image_len))
-      # Rewind the stream, open it as an image with PIL and do some
-      # processing on it
-      image_stream.seek(0)
-      image = Image.open(image_stream).convert('RGB')
-      image.save(configuration.TMP_BUFFER_DIR + 'pi_image.jpg','JPEG')
-      print('Image is %dx%d' % image.size)
-      image.verify()
-      print('Image is verified')
-      txt_stream = io.StringIO(u'This goes into the read buffer.')
-      #connection.write(struct.pack('<L', txt_stream.tell()))
-      #connection.flush()
-      txt_stream.seek(0)
-      connection.write(txt_stream.read())
-      txt_stream.seek(0)
-      txt_stream.truncate()
+      start_time = current_mili_time()      
+      #change, resume, pause, stop = get_keys()
+      #print(get_keys())
+      #if stop:
+      #  print('stop server')
+      #  break
+
+      image_len = connection.recv(4)
+      image_size = struct.unpack('!i', image_len)[0]
+      print('Image size:', image_size)
+      # receive string
+      image_base64 = ''
+      while image_size > 0:
+        if image_size >= 4096:
+          data = connection.recv(4096)
+          image_size -= len(data)  
+          image_base64 += data.decode('utf-8')              
+        else:
+          data = connection.recv(image_size)
+          image_size -= len(data)
+          image_base64 += data.decode('utf-8')                
+
+      print('len:', len(image_base64))
+      # convert string to surface
+      image = open(configuration.TMP_BUFFER_DIR + 'pi_image.jpg', 'wb')
+      image.write(base64.b64decode(image_base64))
+      image.close()
+      data = 'I got the image'
+      connection.send(data.encode())
+      time.sleep(0.5)
       """
       image.show()
       t = read_tensor_from_image_file(
