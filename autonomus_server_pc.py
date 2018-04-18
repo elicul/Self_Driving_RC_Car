@@ -86,7 +86,7 @@ def get_keys():
                     globals()[key_to_global_name[event.key]] = down
     return (change, RESUME, PAUSE, stop)
 
-def setup_interactive_control():
+def pygame_init():
     """Setup the Pygame Interactive Control Screen"""
     pygame.init()
     display_size = (300, 400)
@@ -120,6 +120,7 @@ def Main():
     # Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
     # all interfaces)
     """
+    pygame_init()
     server_socket = socket.socket()
     server_socket.bind(('192.168.0.193', 8090))
     server_socket.listen(0)
