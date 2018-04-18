@@ -11,6 +11,7 @@ def Main():
     try:
         motor_driver_helper.set_gpio_pins()
         server_socket = socket.socket()
+        server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind(configuration.PI_HOST_PORT)
         
         server_socket.listen(1)
