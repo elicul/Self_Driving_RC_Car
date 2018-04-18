@@ -51,9 +51,9 @@ def Main():
                 # Reset the stream for the next capture
                 stream.seek(0)
                 stream.truncate()
-                txt_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
+                #txt_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
                 txt_stream = io.BytesIO()
-                txt_stream.write(connection.read(txt_len))
+                txt_stream.write(connection.read())
                 txt_stream.seek(0)
                 print(txt_stream.read())
         # Write a length of zero to the stream to signal we're done
