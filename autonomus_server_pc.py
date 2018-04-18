@@ -120,30 +120,35 @@ def Main():
   # Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
   # all interfaces)
   """
-  server_socket = socket.socket()
-  server_socket.bind(('192.168.0.193', 8090))
-  server_socket.listen(0)
-
+  img_server_socket = socket.socket()
+  img_server_socket.bind(('192.168.0.193', 8090))
+  img_server_socket.listen(0)
+     
+  txt_server_socket = socket.socket()
+  txt_server_socket.bind(('192.168.0.193', 8080))
+  txt_server_socket.listen(0)
   # Accept a single connection and make a file-like object out of it
-  connection = server_socket.accept()[0].makefile('rb')
+  img_connection = img_server_socket.accept()[0].makefile('rb')
+  txt_connection, txt_address = txt_server_socket.accept()
   try:
-    #pygame_init()
+    pygame_init()
     while True:
-      #change, resume, pause, stop = get_keys()
-      #print(get_keys())
-      #if stop:
-      #  print('stop server')
-      #  break
+      change, resume, pause, stop = get_keys()
+      print(get_keys())
+      if stop:
+        print('stop server')
+        break
+      
       start_time = current_mili_time()
       # Read the length of the image as a 32-bit unsigned int. If the
       # length is zero, quit the loop
-      image_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
+      image_len = struct.unpack('<L', img_connection.read(struct.calcsize('<L')))[0]
       if not image_len:
         break
       # Construct a stream to hold the image data and read the image
-      # data from the connection
+      # data from the img_connection
       image_stream = io.BytesIO()
-      image_stream.write(connection.read(image_len))
+      image_stream.write(img_connection.read(image_len))
       # Rewind the stream, open it as an image with PIL and do some
       # processing on it
       image_stream.seek(0)
@@ -153,13 +158,7 @@ def Main():
       image.verify()
       print('Image is verified')
       command = 'Complete'
-      stream = io.BytesIO(command.encode())
-      connection.write(struct.pack('<L', stream.tell()))
-      connection.flush()
-      stream.seek(0)
-      connection.write(stream.read())
-      stream.seek(0)
-      stream.truncate()
+      txt_connection.send(command.encode())
       """
       image.show()
       t = read_tensor_from_image_file(
@@ -179,13 +178,15 @@ def Main():
       labels = load_labels(label_file)
       for i in top_k:
         data = labels[i]
-      connection.send(data.encode())
+      img_connection.send(data.encode())
       """
       print('Calculation time: ', current_mili_time()-start_time, ' ms')            
     #pygame.quit()
   finally:
-    connection.close()
-    server_socket.close()
+    img_connection.close()
+    img_server_socket.close()
+    txt_connection.close()
+    txt_server_socket.close()
 
 if __name__ == '__main__':
   Main()
