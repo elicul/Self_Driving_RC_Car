@@ -36,7 +36,7 @@ def Main():
             motor_driver_helper.start_pwm(pwm)
             command = 'idle'
             duty_cycle = configuration.INITIAL_PWM_DUTY_CYCLE
-            print('Client: ' + address + ' connected!')
+            print('Client: ', address, ' connected!')
             while True:
                 data = connection.recv(1024).decode()
                 print ('Received: ' + str(data))  
