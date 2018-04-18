@@ -39,16 +39,11 @@ def get_keys():
 def setup_interactive_control():
     """Setup the Pygame Interactive Control Screen"""
     pygame.init()
-    display_size = (300, 400)
+    display_size = (375, 559)
     screen = pygame.display.set_mode(display_size)
-    background = pygame.Surface(screen.get_size())
-    color_white = (255, 255, 255)
-    display_font = pygame.font.Font(None, 40)
     pygame.display.set_caption('RC Car Interactive Control')
-    text = display_font.render('Use arrows to move', 1, color_white)
-    text_position = text.get_rect(centerx=display_size[0] / 2)
-    background.blit(text, text_position)
-    screen.blit(background, (0, 0))
+    background_image = pygame.image.load("images/instructions/traning.jpg").convert()
+    screen.blit(background_image, (0, 0))
     pygame.display.flip()
 
 def interactive_control(client_socket):

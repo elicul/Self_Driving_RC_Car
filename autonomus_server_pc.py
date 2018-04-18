@@ -88,15 +88,9 @@ def get_keys():
 def pygame_init():
   """Setup the Pygame Interactive Control Screen"""
   pygame.init()
-  display_size = (300, 400)
-  screen = pygame.display.set_mode(display_size)
-  background = pygame.Surface(screen.get_size())
-  color_white = (255, 255, 255)
-  display_font = pygame.font.Font(None, 40)
+  display_size = (375, 559)
   pygame.display.set_caption('RC Autonomous Drive Mode')
-  text = display_font.render('Press P for Pause and R for Resume', 1, color_white)
-  text_position = text.get_rect(centerx=display_size[0] / 2)
-  background.blit(text, text_position)
+  background_image = pygame.image.load("images/instructions/autonomous.jpg").convert()  
   screen.blit(background, (0, 0))
   pygame.display.flip()
 
