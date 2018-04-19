@@ -56,12 +56,6 @@ def interactive_control(client_socket):
             command = 'stop'
             client_socket.send(command.encode())
             break
-        if accelerate:
-            command = 'accelerate'
-            client_socket.send(command.encode())
-        if decelerate:
-            command = 'decelerate'
-            client_socket.send(command.encode())
         if change:
             command = 'idle'
             if up_key:
@@ -73,6 +67,10 @@ def interactive_control(client_socket):
                 command = append('left')
             elif right:
                 command = append('right')
+            if accelerate:
+                command = 'accelerate'
+            if decelerate:
+                command = 'decelerate'
             client_socket.send(command.encode())
             data = client_socket.recv(1024).decode()
             print ('Received from server: ' + data)
