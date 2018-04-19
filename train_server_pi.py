@@ -41,7 +41,8 @@ def Main():
             while True:
                 data = connection.recv(1024).decode()
                 print ('Received: ' + str(data))  
-                
+                motor_driver_helper.set_idle_mode()
+
                 if str(data) == 'stop':
                     break
                 if str(data) == 'accelerate':
