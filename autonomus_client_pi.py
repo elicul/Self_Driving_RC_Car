@@ -71,13 +71,6 @@ def Main():
                 elif data == 'up_right':
                     motor_driver_helper.set_forward_mode()                    
                     motor_driver_helper.set_right_mode()
-                elif data == 'down_left':
-                    motor_driver_helper.set_reverse_mode()                    
-                    motor_driver_helper.set_left_mode()
-                elif data == 'down_right':
-                    command = 'right'
-                    motor_driver_helper.set_reverse_mode()                    
-                    motor_driver_helper.set_right_mode()
 
     finally:
         client_socket.close()

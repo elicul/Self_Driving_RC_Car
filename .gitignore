@@ -8,6 +8,7 @@ build/
 tmp/
 *.pyc
 *.jpeg
+*.jpg
 render/
 *.blend1
 *.log

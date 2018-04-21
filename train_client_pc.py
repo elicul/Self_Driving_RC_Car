@@ -20,8 +20,8 @@ def get_keys():
         pygame.K_DOWN: 'DOWN',
         pygame.K_ESCAPE: 'QUIT',
         pygame.K_q: 'QUIT',
-        pygame.K_w: 'ACCELERATE',
-        pygame.K_s: 'DECELERATE'
+        pygame.K_a: 'ACCELERATE',
+        pygame.K_d: 'DECELERATE'
     }
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
