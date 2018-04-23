@@ -6,6 +6,7 @@ import picamera
 import base64
 import configuration
 import utils.motor_driver as motor_driver_helper
+import RPi.GPIO as GPIO
 
 def Main():
     motor_driver_helper.set_gpio_pins()
