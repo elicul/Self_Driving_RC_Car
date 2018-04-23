@@ -41,7 +41,7 @@ def Main():
                 image = image.crop((0, configuration.PICAMERA_RESOLUTION_HEIGHT / 2, configuration.PICAMERA_RESOLUTION_WIDTH, configuration.PICAMERA_RESOLUTION_HEIGHT))
                 stream = BytesIO()
                 image.save(stream, 'JPEG')
-                image_base64 = base64.b64encode(stream)
+                image_base64 = base64.b64encode(stream.getvalue())
                 
                 image_len = struct.pack('!i', len(image_base64))
                 client_socket.send(image_len)
