@@ -8,6 +8,8 @@ import configuration
 import utils.motor_driver as motor_driver_helper
 import RPi.GPIO as GPIO
 
+from PIL import Image
+
 def Main():
     motor_driver_helper.set_gpio_pins()
     client_socket = socket.socket()
@@ -34,7 +36,9 @@ def Main():
             stream = io.BytesIO()
             for foo in camera.capture_continuous(stream, 'jpeg', use_video_port = True):
                 stream.seek(0)
-                image_base64 = base64.b64encode(stream.read())
+                image = Image.open(stream)
+                image = image.crop((0, PICAMERA_RESOLUTION_HEIGHT / 2, PICAMERA_RESOLUTION_WIDTH, PICAMERA_RESOLUTION_HEIGHT))
+                image_base64 = base64.b64encode(image)
                 
                 image_len = struct.pack('!i', len(image_base64))
                 client_socket.send(image_len)
