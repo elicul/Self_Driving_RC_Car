@@ -33,7 +33,7 @@ def Main():
             camera.color_effects = None
             time.sleep(configuration.PICAMERA_WARM_UP_TIME)
             # Motors
-            pwm = motor_driver_helper.get_pwm_imstance()
+            pwm = motor_driver_helper.get_pwm_instance()
             motor_driver_helper.start_pwm(pwm)
             command = 'idle'
             duty_cycle = configuration.INITIAL_PWM_DUTY_CYCLE

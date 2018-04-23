@@ -54,7 +54,7 @@ def set_gpio_pins():
     GPIO.setup(FRONT_MOTOR_DATA_TWO, GPIO.OUT)
     GPIO.setup(BACK_MOTOR_ENABLE_PIN, GPIO.OUT)
 
-def get_pwm_imstance():
+def get_pwm_instance():
     """Returns a PWM instance"""
     return GPIO.PWM(BACK_MOTOR_ENABLE_PIN, PWM_FREQUENCY)
 
