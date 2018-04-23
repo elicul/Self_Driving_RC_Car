@@ -160,7 +160,6 @@ def Main():
         labels = load_labels(label_file)
         for i in top_k:
           data = labels[i]
-        print(data)
         connection.send(data.encode())
         
         print('Calculation time: ', current_mili_time()-start_time, ' ms')            
