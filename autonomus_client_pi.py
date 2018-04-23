@@ -37,11 +37,11 @@ def Main():
             stream = io.BytesIO()
             for foo in camera.capture_continuous(stream, 'jpeg', use_video_port = True):
                 stream.seek(0)
-                #image = Image.open(stream)
-                #image = image.crop((0, configuration.PICAMERA_RESOLUTION_HEIGHT / 2, configuration.PICAMERA_RESOLUTION_WIDTH, configuration.PICAMERA_RESOLUTION_HEIGHT))
+                image = Image.open(stream)
+                image = image.crop((0, configuration.PICAMERA_RESOLUTION_HEIGHT / 2, configuration.PICAMERA_RESOLUTION_WIDTH, configuration.PICAMERA_RESOLUTION_HEIGHT))
                 #stream = io.BytesIO()
-                #image.save(stream, 'JPEG')
-                #stream.seek(0)                
+                image.save(stream, 'JPEG')
+                stream.seek(0)                
                 image_base64 = base64.b64encode(stream.read())
                                 
                 image_len = struct.pack('!i', len(image_base64))
