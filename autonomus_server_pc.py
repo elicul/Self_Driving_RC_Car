@@ -90,9 +90,10 @@ def pygame_init():
   """Setup the Pygame Interactive Control Screen"""
   pygame.init()
   display_size = (375, 559)
+  screen = pygame.display.set_mode(display_size)  
   pygame.display.set_caption('RC Autonomous Drive Mode')
   background_image = pygame.image.load("images/instructions/autonomous.jpg").convert()  
-  screen.blit(background, (0, 0))
+  screen.blit(background_image, (0, 0))
   pygame.display.flip()
 
 def Main():

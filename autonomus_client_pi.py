@@ -8,6 +8,7 @@ import configuration
 import utils.motor_driver as motor_driver_helper
 
 def Main():
+    motor_driver_helper.set_gpio_pins()
     client_socket = socket.socket()
     client_socket.connect(configuration.PC_HOST_PORT)
 
@@ -69,6 +70,7 @@ def Main():
                     motor_driver_helper.set_right_mode()
 
     finally:
+        GPIO.cleanup()
         client_socket.close()
 
 if __name__ == '__main__':
