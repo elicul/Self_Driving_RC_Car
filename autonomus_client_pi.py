@@ -36,7 +36,6 @@ def Main():
             start = time.time()
             stream = io.BytesIO()
             for foo in camera.capture_continuous(stream, 'jpeg', use_video_port = True):
-                stream.truncate()
                 stream.seek(0)
                 image = Image.open(stream)
                 image = image.crop((0, configuration.PICAMERA_RESOLUTION_HEIGHT / 2, configuration.PICAMERA_RESOLUTION_WIDTH, configuration.PICAMERA_RESOLUTION_HEIGHT))
