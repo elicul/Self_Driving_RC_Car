@@ -42,7 +42,7 @@ def setup_interactive_control():
     display_size = (375, 559)
     screen = pygame.display.set_mode(display_size)
     pygame.display.set_caption('RC Car Interactive Control')
-    background_image = pygame.image.load("images/instructions/traning.jpg").convert()
+    background_image = pygame.image.load("instructions/traning.jpg").convert()
     screen.blit(background_image, (0, 0))
     pygame.display.flip()
 

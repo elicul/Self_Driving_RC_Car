@@ -92,7 +92,7 @@ def pygame_init():
   display_size = (375, 559)
   screen = pygame.display.set_mode(display_size)  
   pygame.display.set_caption('RC Autonomous Drive Mode')
-  background_image = pygame.image.load("images/instructions/autonomous.jpg").convert()  
+  background_image = pygame.image.load("instructions/autonomous.jpg").convert()  
   screen.blit(background_image, (0, 0))
   pygame.display.flip()
 
