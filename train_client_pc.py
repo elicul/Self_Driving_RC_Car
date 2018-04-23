@@ -56,24 +56,23 @@ def interactive_control(client_socket):
             command = 'stop'
             client_socket.send(command.encode())
             break
-        if change:
-            command = 'idle'
-            if up_key:
-                command = 'up'
-            elif down:
-                command = 'down'
-            append = lambda x: command + '_' + x if command != 'idle' else x
-            if left:
-                command = append('left')
-            elif right:
-                command = append('right')
-            if accelerate:
-                command = 'accelerate'
-            if decelerate:
-                command = 'decelerate'
-            client_socket.send(command.encode())
-            data = client_socket.recv(1024).decode()
-            print ('Received from server: ' + data)
+        command = 'idle'
+        if up_key:
+            command = 'up'
+        elif down:
+            command = 'down'
+        append = lambda x: command + '_' + x if command != 'idle' else x
+        if left:
+            command = append('left')
+        elif right:
+            command = append('right')
+        if accelerate:
+            command = 'accelerate'
+        if decelerate:
+            command = 'decelerate'
+        client_socket.send(command.encode())
+        data = client_socket.recv(1024).decode()
+        print ('Received from server: ' + data)
         clock.tick(30)
     pygame.quit()
 
