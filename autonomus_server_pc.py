@@ -123,9 +123,8 @@ def Main():
     while True:
       start_time = current_mili_time()      
       pause, stop = get_keys()
-      print(get_keys())
       if stop:
-        print('stop server')
+        print('Stop server')
         break
       if not pause:
         image_len = connection.recv(4)
