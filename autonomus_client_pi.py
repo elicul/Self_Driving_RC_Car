@@ -52,7 +52,7 @@ def Main():
 
                 data = client_socket.recv(4096)
                 data = data.decode('utf-8')
-                print ('Received: ', data, time.strftime())  
+                print ('Received: ', data, time.strftime("%M:%S"))  
                 
                 if data == 'stop':
                     break
