@@ -1,4 +1,5 @@
 import io
+from io import BytesIO
 import socket
 import struct
 import time
@@ -38,7 +39,9 @@ def Main():
                 stream.seek(0)
                 image = Image.open(stream)
                 image = image.crop((0, configuration.PICAMERA_RESOLUTION_HEIGHT / 2, configuration.PICAMERA_RESOLUTION_WIDTH, configuration.PICAMERA_RESOLUTION_HEIGHT))
-                image_base64 = base64.b64encode(image)
+                stream = BytesIO()
+                image.save(stream, 'JPEG')
+                image_base64 = base64.b64encode(stream)
                 
                 image_len = struct.pack('!i', len(image_base64))
                 client_socket.send(image_len)
