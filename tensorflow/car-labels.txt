@@ -1,4 +1,6 @@
-up
+down
 idle
+instructions
 left
 right
+up

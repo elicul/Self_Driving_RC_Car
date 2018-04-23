@@ -43,7 +43,7 @@ def Main():
 
                 data = client_socket.recv(4096)
                 data = data.decode('utf-8')
-                print ('Received: ' data)  
+                print ('Received: ', data)  
                 
                 if data == 'stop':
                     break
@@ -62,13 +62,9 @@ def Main():
                 elif data == 'down':
                     motor_driver_helper.set_reverse_mode()
                 elif data == 'left':
+                    motor_driver_helper.set_forward_mode()                                        
                     motor_driver_helper.set_left_mode()
                 elif data == 'right':
-                    motor_driver_helper.set_right_mode()
-                elif data == 'up_left':
-                    motor_driver_helper.set_forward_mode()                    
-                    motor_driver_helper.set_left_mode()
-                elif data == 'up_right':
                     motor_driver_helper.set_forward_mode()                    
                     motor_driver_helper.set_right_mode()
 

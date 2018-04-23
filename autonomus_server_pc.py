@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+
 from PIL import Image
 
 import io
@@ -95,39 +96,36 @@ def pygame_init():
   pygame.display.flip()
 
 def Main():
-  try:
-    """
-    model_file = '../tensorflow/car-model.pb'
-    label_file = '../tensorflow/car-labels.pb'
-    input_height = 96
-    input_width = 96
-    input_mean = 0
-    input_std = 255
-    input_layer = 'Placeholder'
-    output_layer = 'final_result'
+  model_file = './tensorflow/car-model.pb'
+  label_file = './tensorflow/car-labels.txt'
+  input_height = 128
+  input_width = 128
+  input_mean = 0
+  input_std = 255
+  input_layer = 'Placeholder'
+  output_layer = 'final_result'
 
-    graph = load_graph(model_file)
-    input_name = 'import/' + input_layer
-    output_name = 'import/' + output_layer
-    input_operation = graph.get_operation_by_name(input_name)
-    output_operation = graph.get_operation_by_name(output_name)
-    # Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
-    # all interfaces)
-    """
-    server_socket = socket.socket()
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)    
-    server_socket.bind(configuration.PC_HOST_PORT)
-    server_socket.listen(0)
-      
-    connection = server_socket.accept()[0]
-    #pygame_init()
+  graph = load_graph(model_file)
+  input_name = 'import/' + input_layer
+  output_name = 'import/' + output_layer
+  input_operation = graph.get_operation_by_name(input_name)
+  output_operation = graph.get_operation_by_name(output_name)
+
+  server_socket = socket.socket()
+  server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)    
+  server_socket.bind(configuration.PC_HOST_PORT)
+  server_socket.listen(0)
+    
+  connection = server_socket.accept()[0]
+  pygame_init()
+  try:    
     while True:
       start_time = current_mili_time()      
-      #pause, stop = get_keys()
-      #print(get_keys())
-      #if stop:
-      #  print('stop server')
-      #  break
+      pause, stop = get_keys()
+      print(get_keys())
+      if stop:
+        print('stop server')
+        break
       if not pause:
         image_len = connection.recv(4)
         image_size = struct.unpack('!i', image_len)[0]
@@ -145,13 +143,14 @@ def Main():
         image = open(configuration.TMP_BUFFER_DIR + 'pi_image.jpg', 'wb')
         image.write(base64.b64decode(image_base64))
         image.close()
-        """
+        
         t = read_tensor_from_image_file(
           configuration.TMP_BUFFER_DIR + 'pi_image.jpg',
           input_height=input_height,
           input_width=input_width,
           input_mean=input_mean,
           input_std=input_std)
+        
         with tf.Session(graph=graph) as sess:
           results = sess.run(output_operation.outputs[0], {
               input_operation.outputs[0]: t
@@ -162,9 +161,9 @@ def Main():
         for i in top_k:
           data = labels[i]
         connection.send(data.encode())
-        """
+        
         print('Calculation time: ', current_mili_time()-start_time, ' ms')            
-    #pygame.quit()
+    pygame.quit()
   finally:
     connection.close()
     server_socket.close()
