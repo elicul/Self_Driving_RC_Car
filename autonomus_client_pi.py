@@ -43,8 +43,8 @@ def Main():
                 stream = io.BytesIO()
                 image.save(stream, 'JPEG')
                 stream.seek(0)                
-                image_base64 = base64.b64encode(stream)
-                
+                image_base64 = base64.b64encode(stream.read()).decode()
+                                
                 image_len = struct.pack('!i', len(image_base64))
                 client_socket.send(image_len)
                 client_socket.send(image_base64)
