@@ -142,7 +142,6 @@ def Main():
 
         image = open(configuration.TMP_BUFFER_DIR + 'pi_image.jpg', 'wb')
         image.write(base64.b64decode(image_base64))
-        image = image.crop((0, configuration.PICAMERA_RESOLUTION_HEIGHT / 2, configuration.PICAMERA_RESOLUTION_WIDTH, configuration.PICAMERA_RESOLUTION_HEIGHT))
         image.close()
         
         t = read_tensor_from_image_file(
