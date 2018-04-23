@@ -101,8 +101,8 @@ def Main():
   label_file = './tensorflow/car-labels.txt'
   input_height = 128
   input_width = 128
-  input_mean = 0
-  input_std = 255
+  input_mean = 128
+  input_std = 128
   input_layer = 'Placeholder'
   output_layer = 'final_result'
 
