@@ -9,7 +9,7 @@ import utils.motor_driver as motor_driver_helper
 
 def Main():
     client_socket = socket.socket()
-    client_socket.connect(('192.168.0.193', 8090))
+    client_socket.connect(configuration.PC_HOST_PORT)
 
     try:
         with picamera.PiCamera() as camera:
