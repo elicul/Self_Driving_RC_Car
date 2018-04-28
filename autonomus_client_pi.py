@@ -66,7 +66,8 @@ def Main():
                     motor_driver_helper.change_pwm_duty_cycle(pwm, duty_cycle)
                     print('RC Speed: ' + str(duty_cycle))
                 elif data == 'idle':
-                    motor_driver_helper.set_idle_mode()
+                    #motor_driver_helper.set_idle_mode()
+                    motor_driver_helper.set_forward_mode()                    
                 elif data == 'up':
                     motor_driver_helper.set_forward_mode()
                 elif data == 'down':
