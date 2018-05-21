@@ -45,7 +45,7 @@ def Main():
 
             worksheet.write(row, 0, 'Capture image')
             worksheet.write(row, 1, 'Encode image')
-            worksheet.write(row, 2, 'Tensorflow calculation')
+            worksheet.write(row, 2, 'Send image')
             worksheet.write(row, 3, 'Receve data')
             worksheet.write(row, 4, 'Motors')
             worksheet.write(row, 5, 'Full time')
