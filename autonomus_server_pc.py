@@ -14,8 +14,12 @@ import configuration
 import pygame
 import pygame.font
 import base64
+import xlsxwriter
 
 PAUSE = False
+
+workbook = xlsxwriter.Workbook('Server_time.xlsx')
+worksheet = workbook.add_worksheet()
 
 def load_graph(model_file):
   graph = tf.Graph()
@@ -119,6 +123,16 @@ def Main():
     
   connection = server_socket.accept()[0]
   pygame_init()
+
+  row = 0
+
+  worksheet.write(row, 0, 'Receve image')
+  worksheet.write(row, 1, 'Decode image')
+  worksheet.write(row, 2, 'Tensorflow calculation')
+  worksheet.write(row, 3, 'Send data')
+  worksheet.write(row, 4, 'Full time')
+  
+  row += 1
   try:    
     while True:
       start_time = current_mili_time()      
@@ -141,13 +155,15 @@ def Main():
             data = connection.recv(image_size)
             image_size -= len(data)
             image_base64 += data.decode('utf-8')                
-        print ('Receve image time:', current_mili_time() - img_time)
+        #print ('Receve image time:', current_mili_time() - img_time)
+        worksheet.write(row, 0, current_mili_time() - img_time)
         
         img_time = current_mili_time()
         image = open(configuration.TMP_BUFFER_DIR + 'pi_image.jpg', 'wb')
         image.write(base64.b64decode(image_base64))
         image.close()
-        print ('Receve image time:', current_mili_time() - img_time)        
+        #print ('Decode image time:', current_mili_time() - img_time)        
+        worksheet.write(row, 1, current_mili_time() - img_time)
         
         tensor_time = current_mili_time()        
         t = read_tensor_from_image_file(
@@ -164,15 +180,19 @@ def Main():
         results = np.squeeze(results)
         top_k = results.argsort()[-1:][::-1]
         labels = load_labels(label_file)
-        print ('Tensorflow calculation time:', current_mili_time() - tensor_time)        
+        #print ('Tensorflow calculation time:', current_mili_time() - tensor_time)        
+        worksheet.write(row, 2, current_mili_time() - tensore_time)
 
         img_time = current_mili_time()        
         for i in top_k:
           data = labels[i]
         connection.send(data.encode())
-        print ('Send data time:', current_mili_time() - img_time)        
-        
-        print('Full server time: ', current_mili_time()-start_time)            
+        #print ('Send data time:', current_mili_time() - img_time)        
+        worksheet.write(row, 3, current_mili_time() - img_time)
+
+        worksheet.write(row, 4, current_mili_time() - start_time)
+        #print('Full server time: ', current_mili_time()-start_time) 
+        row += 1           
     pygame.quit()
   finally:
     connection.close()
