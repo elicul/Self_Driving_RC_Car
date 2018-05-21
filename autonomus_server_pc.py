@@ -130,6 +130,8 @@ def Main():
         image_len = connection.recv(4)
         image_size = struct.unpack('!i', image_len)[0]
         image_base64 = ''
+
+        img_time = current_mili_time()
         while image_size > 0:
           if image_size >= 4096:
             data = connection.recv(4096)
@@ -139,11 +141,15 @@ def Main():
             data = connection.recv(image_size)
             image_size -= len(data)
             image_base64 += data.decode('utf-8')                
-
+        print ('Receve image time:', current_mili_time() - img_time)
+        
+        img_time = current_mili_time()
         image = open(configuration.TMP_BUFFER_DIR + 'pi_image.jpg', 'wb')
         image.write(base64.b64decode(image_base64))
         image.close()
+        print ('Receve image time:', current_mili_time() - img_time)        
         
+        tensor_time = current_mili_time()        
         t = read_tensor_from_image_file(
           configuration.TMP_BUFFER_DIR + 'pi_image.jpg',
           input_height=input_height,
@@ -158,11 +164,15 @@ def Main():
         results = np.squeeze(results)
         top_k = results.argsort()[-1:][::-1]
         labels = load_labels(label_file)
+        print ('Tensorflow calculation time:', current_mili_time() - tensor_time)        
+
+        img_time = current_mili_time()        
         for i in top_k:
           data = labels[i]
         connection.send(data.encode())
+        print ('Send data time:', current_mili_time() - img_time)        
         
-        print('Calculation time: ', current_mili_time()-start_time, ' ms')            
+        print('Full server time: ', current_mili_time()-start_time)            
     pygame.quit()
   finally:
     connection.close()

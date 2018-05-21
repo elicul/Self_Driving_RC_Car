@@ -11,6 +11,9 @@ import RPi.GPIO as GPIO
 
 from PIL import Image
 
+def current_mili_time():
+  return int(round(time.time() * 1000))
+
 def Main():
     motor_driver_helper.set_gpio_pins()
     client_socket = socket.socket()
@@ -33,28 +36,39 @@ def Main():
             camera.color_effects = None
             time.sleep(configuration.PICAMERA_WARM_UP_TIME)
 
-            start = time.time()
             stream = io.BytesIO()
             for foo in camera.capture_continuous(stream, 'jpeg', use_video_port = True):
+                start_time = current_mili_time()
+                
+                img_time = current_mili_time()
                 stream.seek(0)
                 image = Image.open(stream)
                 image = image.crop((0, configuration.PICAMERA_RESOLUTION_HEIGHT / 2, configuration.PICAMERA_RESOLUTION_WIDTH, configuration.PICAMERA_RESOLUTION_HEIGHT))
                 output = io.BytesIO()
                 image.save(output, 'JPEG')
                 output.seek(0)                
+                print ('Capture image time:', current_mili_time() - img_time)
+                
+                img_time = current_mili_time()                
                 image_base64 = base64.b64encode(output.read())
-                                
+                print ('Encode image time:', current_mili_time() - img_time)
+
+                send_time = current_mili_time() 
                 image_len = struct.pack('!i', len(image_base64))
                 client_socket.send(image_len)
                 client_socket.send(image_base64)
+                print ('Send image size time:', current_mili_time() - send_time)                
                 # Reset the stream for the next capture
                 stream.seek(0)
                 stream.truncate()
 
+                send_time = current_mili_time()
                 data = client_socket.recv(4096)
                 data = data.decode('utf-8')
-                print ('Received: ', data, time.strftime("%M:%S"))  
-                
+                print ('Send image time:', current_mili_time() - send_time)                
+                print ('Received: ', data)
+                print ('Total time:', current_mili_time() - start_time)
+
                 if data == 'stop':
                     break
                 elif data == 'accelerate':
