@@ -135,12 +135,12 @@ def Main():
   row += 1
   try:    
     while True:
-      start_time = current_mili_time()      
       pause, stop = get_keys()
       if stop:
         print('Stop server')
         break
       if not pause:
+        start_time = current_mili_time()      
         image_len = connection.recv(4)
         image_size = struct.unpack('!i', image_len)[0]
         image_base64 = ''
@@ -181,7 +181,7 @@ def Main():
         top_k = results.argsort()[-1:][::-1]
         labels = load_labels(label_file)
         #print ('Tensorflow calculation time:', current_mili_time() - tensor_time)        
-        worksheet.write(row, 2, current_mili_time() - tensore_time)
+        worksheet.write(row, 2, current_mili_time() - tensor_time)
 
         img_time = current_mili_time()        
         for i in top_k:
@@ -195,6 +195,7 @@ def Main():
         row += 1           
     pygame.quit()
   finally:
+    workbook.close()
     connection.close()
     server_socket.close()
 
