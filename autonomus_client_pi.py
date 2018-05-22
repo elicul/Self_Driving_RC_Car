@@ -57,7 +57,7 @@ def Main():
             row += 1
             for foo in camera.capture_continuous(stream, 'jpeg', use_video_port = True):
                 start_time = current_mili_time()
-                worksheet.write(row, 6, datetime.now())
+                worksheet.write(row, 6, str(datetime.now()))
                 
                 img_time = current_mili_time()
                 stream.seek(0)
@@ -119,7 +119,7 @@ def Main():
                 worksheet.write(row, 4, current_mili_time() - send_time)                
 
                 worksheet.write(row, 5, current_mili_time() - start_time)
-                worksheet.write(row, 7, datetime.now())                
+                worksheet.write(row, 7, str(datetime.now()))                
                 row += 1                                   
     finally:
         workbook.close()    
