@@ -3,6 +3,7 @@ from __future__ import division
 from __future__ import print_function
 
 from PIL import Image
+from datetime import datetime
 
 import io
 import socket
@@ -131,6 +132,8 @@ def Main():
   worksheet.write(row, 2, 'Tensorflow calculation')
   worksheet.write(row, 3, 'Send data')
   worksheet.write(row, 4, 'Full time')
+  worksheet.write(row, 5, 'Start time')
+  worksheet.write(row, 6, 'End time')
   
   row += 1
   try:    
@@ -141,6 +144,7 @@ def Main():
         break
       if not pause:
         start_time = current_mili_time()      
+        worksheet.write(row, 5, datetime.now())
         
         img_time = current_mili_time()
         image_len = connection.recv(4)
@@ -194,6 +198,8 @@ def Main():
 
         worksheet.write(row, 4, current_mili_time() - start_time)
         #print('Full server time: ', current_mili_time()-start_time) 
+        
+        worksheet.write(row, 6, datetime.now())
         row += 1           
     pygame.quit()
   finally:

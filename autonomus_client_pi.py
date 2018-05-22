@@ -11,6 +11,8 @@ import RPi.GPIO as GPIO
 import xlsxwriter
 
 from PIL import Image
+from datetime import datetime
+
 
 workbook = xlsxwriter.Workbook('Client_time.xlsx')
 worksheet = workbook.add_worksheet()
@@ -49,10 +51,13 @@ def Main():
             worksheet.write(row, 3, 'Receve data')
             worksheet.write(row, 4, 'Motors')
             worksheet.write(row, 5, 'Full time')
+            worksheet.write(row, 6, 'Start time')
+            worksheet.write(row, 7, 'End time')
             
             row += 1
             for foo in camera.capture_continuous(stream, 'jpeg', use_video_port = True):
                 start_time = current_mili_time()
+                worksheet.write(row, 6, datetime.now())
                 
                 img_time = current_mili_time()
                 stream.seek(0)
@@ -114,6 +119,7 @@ def Main():
                 worksheet.write(row, 4, current_mili_time() - send_time)                
 
                 worksheet.write(row, 5, current_mili_time() - start_time)
+                worksheet.write(row, 7, datetime.now())                
                 row += 1                                   
     finally:
         workbook.close()    
