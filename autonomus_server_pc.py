@@ -146,6 +146,7 @@ def Main():
         image_len = connection.recv(4)
         image_size = struct.unpack('!i', image_len)[0]
         image_base64 = ''
+        print(image_size)
 
         while image_size > 0:
           if image_size >= 4096:
