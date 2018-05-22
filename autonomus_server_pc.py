@@ -141,11 +141,12 @@ def Main():
         break
       if not pause:
         start_time = current_mili_time()      
+        
+        img_time = current_mili_time()
         image_len = connection.recv(4)
         image_size = struct.unpack('!i', image_len)[0]
         image_base64 = ''
 
-        img_time = current_mili_time()
         while image_size > 0:
           if image_size >= 4096:
             data = connection.recv(4096)
