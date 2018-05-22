@@ -144,7 +144,7 @@ def Main():
         break
       if not pause:
         start_time = current_mili_time()      
-        worksheet.write(row, 5, datetime.now())
+        worksheet.write(row, 5, str(datetime.now()))
         
         img_time = current_mili_time()
         image_len = connection.recv(4)
@@ -199,7 +199,7 @@ def Main():
         worksheet.write(row, 4, current_mili_time() - start_time)
         #print('Full server time: ', current_mili_time()-start_time) 
         
-        worksheet.write(row, 6, datetime.now())
+        worksheet.write(row, 6, str(datetime.now()))
         row += 1           
     pygame.quit()
   finally:
