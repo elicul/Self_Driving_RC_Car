@@ -10,7 +10,6 @@ import time
 import base64
 import xlsxwriter
 
-
 workbook = xlsxwriter.Workbook('Server_time.xlsx')
 worksheet = workbook.add_worksheet()
 
@@ -32,8 +31,8 @@ def Main():
 
   try:    
     while True:
-        now = datetime.utcnow()
-        worksheet.write(row, 0, "%s" % (now.microsecond)) 
+        start_time = datetime.utcnow()
+        worksheet.write(row, 0, "%s" % (start_time.microsecond/1000)) 
         # Receve image size
         image_len = connection.recv(4)
         image_size = struct.unpack('!i', image_len)[0]
@@ -58,8 +57,14 @@ def Main():
         data = 'idle'
         connection.send(data.encode())
         now = datetime.utcnow()
-        worksheet.write(row, 1, "%s" % (now.microsecond)) 
-        row += 1           
+        #worksheet.write(row, 1, "%s" % (now.microsecond/1000)) 
+        delay = ((start_time.microsecond/1000)+333)-(now.microsecond/1000)
+        if delay > 1000:
+            delay -= 1000
+        sleep(delay/1000) 
+        now = datetime.utcnow()
+        worksheet.write(row, 1, "%s" % (now.microsecond/1000))         
+        row += 1          
   finally:
     workbook.close()
     connection.close()

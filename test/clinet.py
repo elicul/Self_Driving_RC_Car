@@ -28,8 +28,8 @@ def Main():
 
     try:
         while True:
-            now = datetime.utcnow()
-            worksheet.write(row, 0, "%s" % (now.microsecond))        
+            start_time = datetime.utcnow()
+            worksheet.write(row, 0, "%s" % (start_time.microsecond/1000))        
             # Capture image
             sleep(0.017)            
             image = Image.open('test.jpg')
@@ -48,10 +48,16 @@ def Main():
             # Send data to motors
             sleep(0.001)
             now = datetime.utcnow()
-            worksheet.write(row, 1, "%s" % (now.microsecond))                                               
+            #worksheet.write(row, 1, "%s" % (now.microsecond/1000))                                               
             stream.seek(0)
             stream.truncate()     
-            row += 1            
+            delay = ((start_time.microsecond/1000)+331)-(now.microsecond/1000)
+            if delay > 1000:
+                delay -= 1000
+            sleep(delay/1000)
+            now = datetime.utcnow()
+            worksheet.write(row, 1, "%s" % (now.microsecond/1000))  
+            row += 1                        
     finally:
         workbook.close()    
         client_socket.close()
