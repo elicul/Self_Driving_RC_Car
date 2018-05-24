@@ -125,6 +125,7 @@ def Main():
                 delay = ((start_t.microsecond/1000)+333)-(now.microsecond/1000)
                 if delay > 1000:
                     delay -= 1000
+                print(delay)
                 sleep(delay/1000)
                 now = datetime.utcnow() 
                 worksheet.write(row, 7, str(now))               
