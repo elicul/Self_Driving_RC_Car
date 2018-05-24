@@ -12,7 +12,7 @@ import xlsxwriter
 
 from PIL import Image
 from datetime import datetime
-
+from time import sleep
 
 workbook = xlsxwriter.Workbook('Client_time.xlsx')
 worksheet = workbook.add_worksheet()
@@ -121,8 +121,6 @@ def Main():
                     motor_driver_helper.set_right_mode()
                 worksheet.write(row, 4, current_mili_time() - send_time)                
 
-                worksheet.write(row, 5, current_mili_time() - start_time)
-
                 now = datetime.utcnow()
                 delay = ((start_t.microsecond/1000)+333)-(now.microsecond/1000)
                 if delay > 1000:
@@ -130,6 +128,7 @@ def Main():
                 sleep(delay/1000)
                 now = datetime.utcnow() 
                 worksheet.write(row, 7, str(now))               
+                worksheet.write(row, 5, str(now - start_t))   
                 
                 row += 1                                   
     finally:

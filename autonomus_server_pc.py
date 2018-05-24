@@ -4,6 +4,7 @@ from __future__ import print_function
 
 from PIL import Image
 from datetime import datetime
+from time import sleep
 
 import io
 import socket
@@ -197,9 +198,6 @@ def Main():
         #print ('Send data time:', current_mili_time() - img_time)        
         worksheet.write(row, 3, current_mili_time() - img_time)
 
-        worksheet.write(row, 4, current_mili_time() - start_time)
-        #print('Full server time: ', current_mili_time()-start_time) 
-        
         now = datetime.utcnow()
         delay = ((start_t.microsecond/1000)+333)-(now.microsecond/1000)
         if delay > 1000:
@@ -207,6 +205,7 @@ def Main():
         sleep(delay/1000)
         now = datetime.utcnow() 
         worksheet.write(row, 6, str(now))   
+        worksheet.write(row, 4, str(now - start_t)) 
 
         row += 1           
     pygame.quit()
