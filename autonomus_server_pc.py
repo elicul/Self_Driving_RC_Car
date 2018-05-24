@@ -138,13 +138,14 @@ def Main():
   row += 1
   try:    
     while True:
+      start_t = datetime.utcnow()
       pause, stop = get_keys()
       if stop:
         print('Stop server')
         break
       if not pause:
         start_time = current_mili_time()      
-        worksheet.write(row, 5, str(datetime.now()))
+        worksheet.write(row, 5, str(start_t))
         
         img_time = current_mili_time()
         image_len = connection.recv(4)
@@ -199,7 +200,14 @@ def Main():
         worksheet.write(row, 4, current_mili_time() - start_time)
         #print('Full server time: ', current_mili_time()-start_time) 
         
-        worksheet.write(row, 6, str(datetime.now()))
+        now = datetime.utcnow()
+        delay = ((start_t.microsecond/1000)+333)-(now.microsecond/1000)
+        if delay > 1000:
+          delay -= 1000
+        sleep(delay/1000)
+        now = datetime.utcnow() 
+        worksheet.write(row, 6, str(now))   
+
         row += 1           
     pygame.quit()
   finally:
