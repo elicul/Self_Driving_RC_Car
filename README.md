@@ -35,3 +35,10 @@
   -	***train_client_pc.py***: Client used for collecting the training data, on our pc.
   - ***train_server_pi.py***: Server used for collecting the training data, on our raspberry pi.
   - ***configuration.py***: Configuration variables.
+
+
+
+- grafove s vremenima odaziva
+- najveću i prosječnu brzinu s kojom se robotic krece
+- real time os zakacit
+- greyscale slike i smanjena rezulucija poboljsanja, cekanje dok ne prodje 333 ms
