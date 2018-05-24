@@ -199,10 +199,10 @@ def Main():
         worksheet.write(row, 3, current_mili_time() - img_time)
 
         now = datetime.utcnow()
-        delay = ((start_t.microsecond/1000)+333)-(now.microsecond/1000)
+        delay = ((start_t.microsecond/1000)+500)-(now.microsecond/1000)
         if delay > 1000:
           delay -= 1000
-        if delay > 0
+        if delay > 0:
           sleep(delay/1000)
         now = datetime.utcnow() 
         worksheet.write(row, 6, str(now))   
