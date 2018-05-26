@@ -66,6 +66,7 @@ def Main():
                 stream.seek(0)
                 image = Image.open(stream)
                 image = image.crop((0, configuration.PICAMERA_RESOLUTION_HEIGHT / 2, configuration.PICAMERA_RESOLUTION_WIDTH, configuration.PICAMERA_RESOLUTION_HEIGHT))
+                image = image.convert('L')
                 output = io.BytesIO()
                 image.save(output, 'JPEG')
                 output.seek(0)                
